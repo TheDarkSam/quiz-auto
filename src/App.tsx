@@ -1,9 +1,12 @@
+import FileUploader from './components/FileUploader';
 
 function App() {
-
   return (
-    <h1>Hwl\elo</h1>
-  )
+    <div>
+      <h1>Upload de Arquivo Excel</h1>
+      <FileUploader />
+    </div>
+  );
 }
 
-export default App
+export default App;
