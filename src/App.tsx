@@ -1,9 +1,13 @@
+import ExcelUploader from './components/FileUploader';
 
-function App() {
-
+export default function App() {
+  function handleFileLoaded(data: any[][]) {
+    console.log(data);
+  }
   return (
-    <h1>Hwl\elo</h1>
-  )
+    <div>
+      <h1>Upload de arquivo XLSX</h1>
+      <ExcelUploader onFileLoaded={handleFileLoaded} />
+    </div>
+  );
 }
-
-export default App
