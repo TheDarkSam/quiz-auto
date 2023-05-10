@@ -79,7 +79,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
     {sortedData.map((row, index) => (
       <tr key={index}>
         <td>{row['Nome Completo']}</td>
-        <td>{row['Média']}</td>
+        <td>{row['Média'].toFixed(2)}</td>
       </tr>
     ))}
   </tbody>
