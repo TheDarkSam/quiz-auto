@@ -31,7 +31,6 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         if (tableData.length === 0) return null;
 
         const headers = tableData[0];
-        const filteredHeaders = headers.filter(header => header.startsWith("Questionário"));
         const questionarioHeaders = headers.filter(header => header.startsWith("Questionário"));
         const nomeHeaders = ["Nome", "Sobrenome"];
 
@@ -68,32 +67,45 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         console.table(sortedData);
 
         return (
-            <table>
-                <thead>
-                    <tr>
-                        {filteredHeaders.map((header: string) => (
-                            <th key={header}>{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {tableData.slice(1).map((row: any[], index: number) => (
-                        <tr key={index}>
-                            {filteredHeaders.map((header: string) => (
-                                <td key={header}>{row[headers.indexOf(header)]}</td>
+            <div className='flex min-h-screen flex-col gap-6 p-6'>
+                <head className='bg-zinc-400 rounded h-40'>
+                    <h1>Convert table excel</h1>
+                </head>
+    
+                <main className='bg-zinc-400 rounded flex-1'>
+                    <table className="w-full min-w-[400px]">
+                        <thead>
+                            <tr>
+                                <th className="bg-gray-600 p-4 text-left text-gray-200 text-xl ease-linear rounded-t">
+                                    Nome Completo
+                                </th>
+                                <th className="bg-gray-600 p-4 text-left text-gray-200 text-xl ease-linear rounded-t">
+                                    Média
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="flex-col items-center justify-center gap-2 text-gray-100">
+                            {sortedData.map((row, index) => (
+                                <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-400' : 'bg-gray-500'}`} >
+                                    <td className={" p-4 text-xl border-t-4 border-gray-950"}>
+                                        {row['Nome Completo']}
+                                    </td>
+                                    <td className=" p-4 text-xl border-t-4 border-gray-950">{row['Média'].toFixed(2)}</td>
+                                </tr>
                             ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </main>   
+            </div>
+
         );
     };
 
     return (
         <div>
-            <div {...getRootProps()}>
+            <div {...getRootProps()} className='bg-gray-400 w-52 p-3 rounded m-3'>
                 <input {...getInputProps()} />
-                {isDragActive ? <p>Arraste o arquivo aqui ...</p> : <p>Arraste o arquivo XLSX aqui, ou clique para selecionar o arquivo</p>}
+                {isDragActive ? <span>Arraste o arquivo aqui ...</span> : <span>Arraste o arquivo XLSX aqui, ou clique para selecionar o arquivo</span>}
             </div>
             {renderTable()}
         </div>
