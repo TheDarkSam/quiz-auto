@@ -31,7 +31,6 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
     if (tableData.length === 0) return null;
 
     const headers = tableData[0];
-    const filteredHeaders = headers.filter(header => header.startsWith("Questionário"));
     const questionarioHeaders = headers.filter(header => header.startsWith("Questionário"));
     const nomeHeaders = ["Nome", "Sobrenome"];
 
