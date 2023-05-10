@@ -69,23 +69,21 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
 
     return (
       <table>
-        <thead>
-          <tr>
-            {filteredHeaders.map((header: string) => (
-              <th key={header}>{header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.slice(1).map((row: any[], index: number) => (
-            <tr key={index}>
-              {filteredHeaders.map((header: string) => (
-                <td key={header}>{row[headers.indexOf(header)]}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>Nome Completo</th>
+      <th>Média</th>
+    </tr>
+  </thead>
+  <tbody>
+    {sortedData.map((row, index) => (
+      <tr key={index}>
+        <td>{row['Nome Completo']}</td>
+        <td>{row['Média']}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
     );
   };
 
