@@ -19,7 +19,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         const worksheet = workbook.Sheets[sheetName];
         const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         setTableData(data);
-        onFileLoaded(data);0
+        onFileLoaded(data);
       }
     };
     acceptedFiles.forEach((file: any) => reader.readAsBinaryString(file));
@@ -31,11 +31,41 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
     if (tableData.length === 0) return null;
 
     const headers = tableData[0];
-    const filteredHeaders = headers.filter((header: string) => header.startsWith('Nome'));
-    const sobrenome = headers.filter((header: string) => header.startsWith('Sobrenome'));
-    const questionario = headers.filter((header: string) => header.startsWith('Questionário'));
-    filteredHeaders.push(sobrenome);
-    filteredHeaders.push(questionario);
+    const filteredHeaders = headers.filter(header => header.startsWith("Questionário"));
+    const questionarioHeaders = headers.filter(header => header.startsWith("Questionário"));
+    const nomeHeaders = ["Nome", "Sobrenome"];
+
+    const filteredData = tableData.slice(1).map(row => {
+      const dataRow: Record<string, any> = {};
+      let nomeCompleto = '';
+      for (let i = 0; i < headers.length; i++) {
+        if (nomeHeaders.includes(headers[i])) {
+          nomeCompleto += row[i] + ' ';
+        } else if (questionarioHeaders.includes(headers[i])) {
+          if (typeof row[i] === 'string') {
+            const valor = row[i].trim();
+            dataRow[headers[i]] = valor !== '-' ? parseInt(valor) : 0;
+          } else {
+            dataRow[headers[i]] = row[i];
+          }
+        }
+      }
+      dataRow['Nome Completo'] = nomeCompleto.trim();
+      return dataRow;
+    });
+    
+    const sortedData = filteredData.map(row => {
+      const notas = questionarioHeaders.map(header => row[header]);
+      const sortedNotas = notas.sort((a, b) => b - a);
+      const numNotas = sortedNotas.length;
+      const numNotas75Percent = Math.floor(numNotas * 0.75);
+      const notas75Percent = sortedNotas.slice(0, numNotas75Percent);
+      const somaNotas75Percent = notas75Percent.reduce((acc, nota) => acc + nota, 0);
+      const mediaNotas75Percent = somaNotas75Percent / notas75Percent.length;
+      return { 'Nome Completo': row['Nome Completo'], 'Média': mediaNotas75Percent * 0.2 };
+    });
+    
+      console.table(sortedData);
 
     return (
       <table>
