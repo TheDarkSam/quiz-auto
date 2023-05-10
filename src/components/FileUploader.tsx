@@ -23,6 +23,7 @@ export default function ExcelUploader({onFileLoaded}: Props) {
 }, [onFileLoaded])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     return (
+        <>
         <div {...getRootProps()}>
             <input {...getInputProps()} />
             {isDragActive ? (
@@ -31,5 +32,8 @@ export default function ExcelUploader({onFileLoaded}: Props) {
                 <p>Arraste o arquivo XLSX aqui, ou clique para selecionar o arquivo</p>
             )}
         </div>
+        <div></div>
+        </>
+
     );
 }
