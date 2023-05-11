@@ -8,7 +8,7 @@ type Props = {
 
 export default function ExcelUploader({ onFileLoaded }: Props) {
     const [tableData, setTableData] = useState<string[][]>([]);
-
+ 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -57,6 +57,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
             dataRow['Nome Completo'] = nomeCompleto.trim();
             return dataRow;
         });
+      
 
         const sortedData = filteredData.map(row => {
             const notas = questionarioHeaders.map(header => row[header]);
@@ -68,8 +69,13 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
             const mediaNotas75Percent = Number(somaNotas75Percent) / notas75Percent.length;
             return { 'Nome Completo': row['Nome Completo'], 'Média': mediaNotas75Percent * 0.2 };
         });
-
-        console.table(sortedData);
+        console.log(setTableData, 'HELLO');
+        
+        sortedData.sort(function (a:any, b:any) {
+            if (a['Nome Completo'] < b['Nome Completo']) return -1;
+            if (a['Nome Completo'] > b['Nome Completo']) return 1;
+            return 0;
+        })
 
         return (
             <div className='flex min-h-screen flex-col gap-6 p-6'>
@@ -108,9 +114,9 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
 
     return (
         <div>
-            <div {...getRootProps()} className='bg-gray-400 w-52 p-3 rounded m-3'>
+            <div {...getRootProps()} className='bg-gray-400 w-52 p-3 rounded m-3 h-28'>
                 <input {...getInputProps()} />
-                {isDragActive ? <span>Arraste o arquivo aqui ...</span> : <span>Arraste o arquivo XLSX aqui, ou clique para selecionar o arquivo</span>}
+                {isDragActive ? <span>Carregando...</span> : <span>Arraste o arquivo EXCEL aqui, ou clique para selecionar o arquivo</span>}
             </div>
             {renderTable()}
         </div>

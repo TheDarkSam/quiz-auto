@@ -6,7 +6,6 @@ export default function App() {
   }
   return (
     <div>
-      <h1>Upload de arquivo XLSX</h1>
       <ExcelUploader onFileLoaded={handleFileLoaded} />
     </div>
   );
