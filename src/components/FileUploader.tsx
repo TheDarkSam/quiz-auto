@@ -78,13 +78,10 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         })
 
         return (
-            <div className='flex min-h-screen flex-col gap-6 p-6'>
-                <head className='bg-zinc-400 rounded h-40'>
-                    <h1>Convert table excel</h1>
-                </head>
-    
-                <main className='bg-zinc-400 rounded flex-1'>
-                    <table className="w-full min-w-[400px]">
+            <div className='flex  flex-col gap-6 p-6'>
+              
+                <main className='flex justify-center items-center my-auto rounded flex-1'>
+                    <table className="w-[1000px] min-w-[400px]">
                         <thead>
                             <tr>
                                 <th className="bg-gray-600 p-4 text-left text-gray-200 text-xl ease-linear rounded-t">
@@ -116,7 +113,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         <div>
             <div {...getRootProps()} className='bg-gray-400 w-52 p-3 rounded m-3 h-28'>
                 <input {...getInputProps()} />
-                {isDragActive ? <span>Carregando...</span> : <span>Arraste o arquivo EXCEL aqui, ou clique para selecionar o arquivo</span>}
+                {isDragActive ? <span>Carregando...</span> : <button>Arraste o arquivo EXCEL aqui, ou clique para selecionar o arquivo</button>}
             </div>
             {renderTable()}
         </div>
