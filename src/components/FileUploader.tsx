@@ -32,7 +32,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         if (tableData.length === 0) return null;
 
         const headers = tableData[0];
-        const questionarioHeaders = headers.filter(header => header.startsWith("Questionário"));
+        const questionarioHeaders = headers.filter(header => header.startsWith("Questionário") && !header.includes("remover"));
         const nomeHeaders = ["Nome", "Sobrenome"];
 
         interface DataRow {
