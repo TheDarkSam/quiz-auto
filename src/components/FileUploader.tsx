@@ -3,13 +3,13 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 type Props = {
-    onFileLoaded: (data: any[][]) => void;
+    onFileLoaded: (data: File[][]) => void;
 };
 
 export default function ExcelUploader({ onFileLoaded }: Props) {
-    const [tableData, setTableData] = useState<any[][]>([]);
+    const [tableData, setTableData] = useState<string[][]>([]);
 
-    const onDrop = useCallback((acceptedFiles: any) => {
+    const onDrop = useCallback((acceptedFiles: File[]) => {
         const reader = new FileReader();
         reader.onload = () => {
             const binaryStr = reader.result;
@@ -17,12 +17,13 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
                 const workbook = XLSX.read(binaryStr, { type: 'binary' });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                setTableData(data);
+                const data: File[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as File[][];
+                const data2 = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                setTableData(data2 as string[][]);
                 onFileLoaded(data);
             }
         };
-        acceptedFiles.forEach((file: any) => reader.readAsBinaryString(file));
+        acceptedFiles.forEach((file: File) => reader.readAsBinaryString(file));
     }, [onFileLoaded]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -34,8 +35,12 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
         const questionarioHeaders = headers.filter(header => header.startsWith("Questionário"));
         const nomeHeaders = ["Nome", "Sobrenome"];
 
+        interface DataRow {
+          [key: string]: string | number;
+        }
+
         const filteredData = tableData.slice(1).map(row => {
-            const dataRow: Record<string, any> = {};
+            const dataRow: DataRow = {};
             let nomeCompleto = '';
             for (let i = 0; i < headers.length; i++) {
                 if (nomeHeaders.includes(headers[i])) {
@@ -55,12 +60,12 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
 
         const sortedData = filteredData.map(row => {
             const notas = questionarioHeaders.map(header => row[header]);
-            const sortedNotas = notas.sort((a, b) => b - a);
+            const sortedNotas = notas.sort((a, b) => Number(b) - Number(a));
             const numNotas = sortedNotas.length;
             const numNotas75Percent = Math.floor(numNotas * 0.75);
             const notas75Percent = sortedNotas.slice(0, numNotas75Percent);
-            const somaNotas75Percent = notas75Percent.reduce((acc, nota) => acc + nota, 0);
-            const mediaNotas75Percent = somaNotas75Percent / notas75Percent.length;
+            const somaNotas75Percent = notas75Percent.reduce((acc, nota) => Number(acc) + Number(nota), 0);
+            const mediaNotas75Percent = Number(somaNotas75Percent) / notas75Percent.length;
             return { 'Nome Completo': row['Nome Completo'], 'Média': mediaNotas75Percent * 0.2 };
         });
 
