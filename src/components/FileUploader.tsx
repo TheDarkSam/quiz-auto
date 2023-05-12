@@ -98,7 +98,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
                                     <td className={" p-4 text-xl border-t-4 border-gray-950"}>
                                         {row['Nome Completo']}
                                     </td>
-                                    <td className=" p-4 text-xl border-t-4 border-gray-950">{row['Média'].toFixed(2)}</td>
+                                    <td className=" p-4 text-xl border-t-4 border-gray-950">{row['Média'].toFixed(1)}</td>
                                 </tr>
                             ))}
                         </tbody>
