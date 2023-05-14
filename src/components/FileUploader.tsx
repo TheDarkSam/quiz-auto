@@ -69,7 +69,6 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
             const mediaNotas75Percent = Number(somaNotas75Percent) / notas75Percent.length;
             return { 'Nome Completo': row['Nome Completo'], 'Média': mediaNotas75Percent * 0.2 };
         });
-        console.log(setTableData, 'HELLO');
         
         sortedData.sort(function (a:any, b:any) {
             if (a['Nome Completo'] < b['Nome Completo']) return -1;
@@ -98,7 +97,7 @@ export default function ExcelUploader({ onFileLoaded }: Props) {
                                     <td className={" p-4 text-xl border-t-4 border-gray-950"}>
                                         {row['Nome Completo']}
                                     </td>
-                                    <td className=" p-4 text-xl border-t-4 border-gray-950">{row['Média'].toFixed(2)}</td>
+                                    <td className=" p-4 text-xl border-t-4 border-gray-950">{row['Média'].toFixed(1)}</td>
                                 </tr>
                             ))}
                         </tbody>
